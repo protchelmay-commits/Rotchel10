@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISUFST San Enrique Directory</title>
+  <style>
+    :root {
+      --primary: #064e3b;
+      --primary-light: #10b981;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --subtext: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 2rem 1rem;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 2.5rem 1rem;
+      background: linear-gradient(135deg, var(--primary) 0%, #022c22 100%);
+      color: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--accent), #fbbf24);
+    }
+
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    /* Controls Bar & Icon Filters */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 500px;
+      padding: 0.8rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+      background: white;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Icon Filter Bar */
+    .filter-buttons {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
+    }
+
+    .icon-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background-color: white;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #334155;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .icon-circle svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--subtext);
+      transition: color 0.2s ease;
+    }
+
+    .filter-item:hover .icon-circle,
+    .filter-item.active .icon-circle {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .filter-item:hover .filter-label,
+    .filter-item.active .filter-label {
+      color: var(--primary);
+    }
+
+    /* Section & Cards */
+    .section-title {
+      color: var(--primary);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1.25rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 1.25rem;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .profile-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      flex-shrink: 0;
+      background-color: #f1f5f9;
+    }
+
+    .card-info {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    .name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .role {
+      font-size: 0.85rem;
+      color: var(--subtext);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tag-university { background-color: #fef3c7; color: #b45309; }
+    .tag-campus { background-color: #e0f2fe; color: #0369a1; }
+    .tag-departments { background-color: #f3e8ff; color: #6b21a8; }
+    .tag-faculty { background-color: #dcfce7; color: #15803d; }
+    .tag-instructor { background-color: #fef08a; color: #854d0e; }
+    .tag-staff { background-color: #e0f2fe; color: #0369a1; }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--subtext);
+      grid-column: 1 / -1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Iloilo State University of Fisheries Science and Technology</h1>
+      <p class="subtitle">San Enrique Campus Directory</p>
+    </header>
+
+    <div class="controls">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search by name, role, or section...">
+      
+      <!-- Icon Navigation Filters -->
+      <div class="filter-buttons">
+        <button class="filter-item active" onclick="filterCategory('all', this)">
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+          </div>
+          <span class="filter-label">All Roles</span>
+        </button>
+
+        <button class="filter-item" onclick="filterCategory('university', this)">
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+          </div>
+          <span class="filter-label">University</span>
+        </button>
+
+        <button class="filter-item" onclick="filterCategory('campus', this)">
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          </div>
+          <span class="filter-label">Campus</span>
+        </button>
+
+        <button class="filter-item" onclick="filterCategory('departments', this)">
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 7h5v-5H4v5zm6 0h5v-5h-5v5zm6 0h5v-5h-5v5zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>
+          </div>
+          <span class="filter-label">Departments</span>
+        </button>
+
+        <button class="filter-item" onclick="filterCategory('faculty-staff', this)">
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          </div>
+          <span class="filter-label">Faculty & Staff</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="directoryContainer"></div>
+  </div>
+
+  <script>
+    const directoryData = [
+      {
+        section: "I.University Level",
+        members: [
+          { name: "Dr. Nordy D. Siason Jr.", role: "University President", img: "Siason.jpg", type: "university", tagLabel: "University" }
+        ]
+      },
+      {
+        section: "II. Campus Level",
+        members: [
+          { name: "Dr. Michael B. Dizon", role: "Campus Administrator", img: "Dizon.jpg", type: "campus", tagLabel: "Campus" },
+          { name: "Melby P. Parreño", role: "Administrative Officer, Finance & General Services", img: "Parreño.jpg", type: "campus", tagLabel: "Campus" }
+        ]
+      },
+      {
+        section: "III.  Department Level",
+        members: [
+          { name: "Dr. Wenda D. Panes, Ed.D", role: "Dean, College of Informatics & Computing Innovation", img: "Panes.jpg", type: "departments", tagLabel: "Departments" },
+          { name: "Dr. Rene T. Estomo", role: "Dean, College of Education", img: "Estomo.jpg", type: "departments", tagLabel: "Departments" },
+          { name: "Noli L. Gerona", role: "Dean, College of Agriculture", img: "Gerona.jpg", type: "departments", tagLabel: "Departments" },
+          { name: "Janice H. Ching", role: "Dean, College of Management", img: "Ching.jpg", type: "departments", tagLabel: "Departments" }
+        ]
+      },
+      {
+        section: "IV.CICI Faculty & Staff",
+        members: [
+          { name: "Dr. Wenna J. Bulnes", role: "Faculty", img: "Bulnes.jpg", type: "faculty-staff", tagType: "faculty", tagLabel: "Faculty" },
+          { name: "Dr. Analiza G. Alingalan", role: "Faculty", img: "Alingalan.jpg", type: "faculty-staff", tagType: "faculty", tagLabel: "Faculty" },
+          { name: "Dr. Dythne P. Dacudao", role: "Faculty", img: "Dacudao.jpg", type: "faculty-staff", tagType: "faculty", tagLabel: "Faculty" },
+          { name: "Dr. Ian P. Sugatan", role: "Faculty", img: "Sugatan.jpg", type: "faculty-staff", tagType: "faculty", tagLabel: "Faculty" },
+          { name: "Instr. Dave Allan Tagacay", role: "Instructor", img: "Tagacay.jpg", type: "faculty-staff", tagType: "instructor", tagLabel: "Instructor" },
+          { name: "Instr. Ivan Silvestre", role: "Instructor", img: "Silvestre.jpg", type: "faculty-staff", tagType: "instructor", tagLabel: "Instructor" },
+          { name: "Andrea Delos Santos", role: "Staff", img: "Delos Santos.jpg", type: "faculty-staff", tagType: "staff", tagLabel: "Staff" },
+          { name: "Michael Borcillo", role: "Staff", img: "Borcillo.jpg", type: "faculty-staff", tagType: "staff", tagLabel: "Staff" }
+        ]
+      }
+    ];
+
+    let currentFilter = 'all';
+
+    function renderDirectory(data) {
+      const container = document.getElementById('directoryContainer');
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      container.innerHTML = '';
+
+      let totalResults = 0;
+
+      data.forEach(group => {
+        const filteredMembers = group.members.filter(m => {
+          const matchesSearch = m.name.toLowerCase().includes(searchTerm) || m.role.toLowerCase().includes(searchTerm);
+          const matchesFilter = currentFilter === 'all' || m.type === currentFilter;
+          return matchesSearch && matchesFilter;
+        });
+
+        if (filteredMembers.length > 0) {
+          totalResults += filteredMembers.length;
+          
+          const sectionEl = document.createElement('div');
+          sectionEl.className = 'section-title';
+          sectionEl.textContent = group.section;
+          
+          const gridEl = document.createElement('div');
+          gridEl.className = 'grid';
+
+          filteredMembers.forEach(m => {
+            const tagClass = m.tagType || m.type;
+            const tagDisplay = m.tagLabel || m.type.replace('-', ' ');
+            
+            gridEl.innerHTML += `
+              <div class="card">
+                <img src="${m.img}" alt="${m.name}" class="profile-img" onerror="this.src='https://via.placeholder.com/70?text=User'">
+                <div class="card-info">
+                  <div class="name">${m.name}</div>
+                  <div class="role">${m.role}</div>
+                  <span class="tag tag-${tagClass}">${tagDisplay}</span>
+                </div>
+              </div>
+            `;
+          });
+
+          container.appendChild(sectionEl);
+          container.appendChild(gridEl);
+        }
+      });
+
+      if (totalResults === 0) {
+        container.innerHTML = '<div class="empty-state">No directory entries matched your search.</div>';
+      }
+    }
+
+    function filterCategory(type, btn) {
+      currentFilter = type;
+      document.querySelectorAll('.filter-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderDirectory(directoryData);
+    }
+
+    document.getElementById('searchInput').addEventListener('input', () => renderDirectory(directoryData));
+
+    renderDirectory(directoryData);
+  </script>
+</body>
+</html>
